@@ -1,0 +1,14 @@
+name: 'Build Docker Images using Cache'
+description: 'Docker Stack CI Solution'
+inputs:
+  dockerfile:
+    description: 'Dockerfile to build images from'
+    required: true
+outputs:
+  image-names:
+    description: 'Image names available in the registry'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.dockerfile }}
