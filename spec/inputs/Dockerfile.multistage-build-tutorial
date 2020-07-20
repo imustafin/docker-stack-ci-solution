@@ -1,14 +1,14 @@
 # From https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
 
-# tag-as $COMMIT
 FROM golang:1.7.3 AS compilation
+# tag-as $COMMIT
 WORKDIR /go/src/github.com/alexellis/href-counter/
 RUN go get -d -v golang.org/x/net/html  
 COPY app.go .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-# tag-as $COMMIT
 FROM alpine:latest AS app
+# tag-as $COMMIT
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=0 /go/src/github.com/alexellis/href-counter/app .
