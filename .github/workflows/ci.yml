@@ -23,7 +23,7 @@ jobs:
         uses: ./
         with:
           dockerfile: 'spec/inputs/Dockerfile.multistage-build-tutorial'
-          args: ARGS
+          args: ${{ env.ARGS }}
       - name: Run integration tests
         run: >-
           NAMES="${{ steps.run.outputs.image-names }}" \

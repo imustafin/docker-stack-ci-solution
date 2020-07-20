@@ -4,6 +4,9 @@ inputs:
   dockerfile:
     description: 'Dockerfile to build images from'
     required: true
+  args:
+    description: 'Arguments for tagging as a JSON string'
+    required: true
 outputs:
   image-names:
     description: 'Image names available in the registry'
@@ -12,3 +15,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.dockerfile }}
+    - ${{ inputs.args }}

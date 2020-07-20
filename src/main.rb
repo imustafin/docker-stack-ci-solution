@@ -1,5 +1,3 @@
-require_relative 'github_actions'
+require_relative 'application'
 
-actions = GithubActions.new(ARGV)
-
-pp actions.argv
+Application.new.run(ARGV)
