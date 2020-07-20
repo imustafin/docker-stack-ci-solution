@@ -18,12 +18,22 @@ jobs:
         run: bundle install
       - name: Run unit tests
         run: bundle exec rspec --tag "~integration"
+
+      # Usage example
+      - name: Login to GitHub docker package repo
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
       - name: Run action with test data for integration tests
         id: run
         uses: ./
         with:
           dockerfile: 'spec/inputs/Dockerfile.multistage-build-tutorial'
+          context: 'spec/inputs/'
           args: ${{ env.ARGS }}
+          registry: docker.pkg.github.com/${{ github.repository }}/ # / in the end is required
+      - name: Show commands
+        run: |
+          ls
+          ${{ steps.run.outputs.build-commands }}
       - name: Run integration tests
         run: >-
           NAMES="${{ steps.run.outputs.image-names }}" \

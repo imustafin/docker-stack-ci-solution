@@ -9,9 +9,7 @@ class DockerProcessor
   end
 
   def targets
-    kv = []
-
-    @images.each do |image|
+    @images.map do |image|
       base_image = image[:base_image]
       as = image[:as]
       tag_as = image[:tag_as]
@@ -19,10 +17,10 @@ class DockerProcessor
       raise "Image FROM #{base_image} has no alias (AS)" unless as
       raise "Image FROM #{base_image} AS #{as} has no #tag-as inside" unless tag_as
 
-      kv << [as, as + ':' + format_tag(tag_as)]
-    end
+      image[:tag] = format_tag(tag_as)
 
-    Hash[kv]
+      image
+    end
   end
 
   def format_tag(tag_as)

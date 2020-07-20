@@ -25,9 +25,13 @@ class GithubActions
     Hash[kv]
   end
 
+  def format_string(s)
+    s.gsub("\n", '%0A')
+  end
+
   def set_outputs(outputs = {})
     outputs.each do |k, v|
-      puts "::set-output name=#{k}::#{v}"
+      puts "::set-output name=#{k}::#{format_string(v)}"
     end
   end
 end

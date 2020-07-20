@@ -11,9 +11,9 @@ RSpec.describe DockerProcessor do
 
     describe '#targets' do
       it 'gives targets with desired tags' do
-        expect(processor.targets).to eq(
-          'compilation' => 'compilation:123hash',
-          'app' => 'app:123hash'
+        expect(processor.targets).to contain_exactly(
+          include(as: 'compilation', tag: '123hash'),
+          include(as: 'app', tag: '123hash')
         )
       end
     end

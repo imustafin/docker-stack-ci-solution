@@ -1,3 +1,3 @@
 require_relative 'application'
 
-Application.new.run(ARGV)
+Application.new(ARGV).run

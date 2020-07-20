@@ -4,15 +4,28 @@ inputs:
   dockerfile:
     description: 'Dockerfile to build images from'
     required: true
+  context:
+    description: 'Docker build context'
+    required: true
   args:
     description: 'Arguments for tagging as a JSON string'
     required: true
+  registry:
+    description: |
+        Docker Registry to push images to.
+
+        Blank for DockerHub.
+        GitHub Packages example: docker.pkg.github.com/\$\{\{ github.repository \}\}/ (trailing slash is required)
+    required: false
 outputs:
   image-names:
     description: 'Image names available in the registry'
+    build-commands: 'Script to build and push images'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.dockerfile }}
+    - ${{ inputs.context }}
     - ${{ inputs.args }}
+    - ${{ inputs.registry }}
