@@ -1,7 +1,7 @@
 require 'rspec'
 require 'json'
 
-RSpec.describe 'github integration' do
+RSpec.describe 'github integration', integration: true do
   subject(:results) { ENV['NAMES'].split(' ') }
 
   let(:args) { JSON.parse(ENV['ARGS']) }
