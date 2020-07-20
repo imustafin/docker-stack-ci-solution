@@ -3,8 +3,6 @@ require_relative 'dockerfile_parser'
 
 
 class DockerProcessor
-  Image = Struct.new(:name, :tag, :base_name)
-
   def initialize(dockerfile, args)
     @images = DockerfileParser.new(dockerfile).images
     @args = args

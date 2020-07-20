@@ -25,24 +25,46 @@ class DockerfileParser
   def parse_image(lines)
     image = {}
 
-    # Parse FROM [AS]
-    from_as_regex = /^FROM (#{IMAGE_NAME})(?: AS (#{IMAGE_NAME}))?/
+    first, *rest = lines
 
-    from_as = lines[0].match(from_as_regex)
+    base_image, as = extract_from_as(first)
+    image[:base_image] = base_image
+    image[:as] = as
 
-    image[:base_image] = from_as[1]
-
-    if from_as.length > 1
-      image[:as] = from_as[2]
-    end
-
-    # Parse other lines
-    lines.drop(1).each do |line|
-      if line.start_with?('# tag-as')
-        image[:tag_as] = line.sub('# tag-as', '')
-      end
-    end
+    image[:tag_as] = extract_tag_as(rest)
+    image[:args] = extract_args(rest)
 
     image
+  end
+
+  def extract_from_as(line)
+    from_as_regex = /^FROM (#{IMAGE_NAME})(?: AS (#{IMAGE_NAME}))?/
+
+    from_as = line.match(from_as_regex)
+
+    base_image = from_as[1]
+
+    as = nil
+
+    if from_as.length > 1
+      as = from_as[2]
+    end
+
+    [base_image, as]
+  end
+
+  def extract_tag_as(lines)
+    tag_as_command = '# tag-as'
+    lines
+      .filter { |s| s.start_with?(tag_as_command) }
+      .map { |s| s.sub(tag_as_command, '').strip }
+      .first
+  end
+
+  def extract_args(lines)
+    arg_command = 'ARG '
+    lines
+      .filter { |s| s.start_with?(arg_command) }
+      .map { |s| s.sub(arg_command, '') }
   end
 end

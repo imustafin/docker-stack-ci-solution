@@ -1,0 +1,14 @@
+FROM scratch AS stage1
+# tag-as $ARG1
+ARG ARG1
+RUN echo $ARG1 > arg1
+
+FROM stage1 AS stage1-2
+# tag-as $ARG1 - $ARG2
+ARG ARG2
+RUN echo $ARG2 > arg2
+
+FROM stage1 AS stage1-3
+# tag-as $ARG1 - $ARG3
+ARG ARG3
+RUN echo $ARG3 > arg3
