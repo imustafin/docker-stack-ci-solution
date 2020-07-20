@@ -1,5 +1,5 @@
 class GithubActions
-  attr_reader argv
+  attr_reader :argv
 
   def initialize(argv)
     @argv = argv

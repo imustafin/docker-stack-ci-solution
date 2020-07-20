@@ -1,0 +1,27 @@
+on:
+  - push
+
+jobs:
+  test_github_actions_integration:
+    runs-on: ubuntu-latest
+    env:
+      ARGS: '{ "COMMIT": "${{ github.sha }}" }'
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Run action with test data
+        id: run
+        uses: ./
+        with:
+          dockerfile: 'spec/inputs/Dockerfile.multistage-build-tutorial'
+          args: ARGS
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6'
+      - name: Bundle install
+        run: bundle install
+      - name: Run integration tests
+        run: >-
+          NAMES="${{ steps.run.outputs.image-names }}" \
+            bundle exec rspec \
+            spec/gh_actions_integration_spec.rb
