@@ -44,10 +44,7 @@ class Application
     images.each do |image|
       name = full_name(image)
 
-      commands << "echo Pulling #{name}"
-      commands << "echo ..."
-
-#      commands << "! docker pull \"#{name}\""
+      commands << "docker pull #{name} || true"
 
       cache_froms << name
 

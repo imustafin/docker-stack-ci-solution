@@ -2,10 +2,8 @@ on:
   - push
 
 jobs:
-  tests:
+  unit_tests:
     runs-on: ubuntu-latest
-    env:
-      ARGS: '{ "COMMIT": "${{ github.sha }}" }'
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -19,23 +17,28 @@ jobs:
       - name: Run unit tests
         run: bundle exec rspec --tag "~integration"
 
-      # Usage example
+  acceptance_test_run:
+    runs-on: ubuntu-latest
+    env:
+      ARGS: |
+          {
+            "COMMIT": "${{ github.sha }}",
+            "CGO_ENABLED": 0
+          }
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
       - name: Login to GitHub docker package repo
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
       - name: Run action with test data for integration tests
         id: run
         uses: ./
         with:
-          dockerfile: 'spec/inputs/Dockerfile.multistage-build-tutorial'
-          context: 'spec/inputs/'
+          dockerfile: 'spec/inputs/href-counter/Dockerfile.multistage-build-tutorial'
+          context: 'spec/inputs/href-counter/'
           args: ${{ env.ARGS }}
           registry: docker.pkg.github.com/${{ github.repository }}/ # / in the end is required
-      - name: Show commands
+      - name: Run build commands
         run: |
-          ls
+          set -o xtrace
           ${{ steps.run.outputs.build-commands }}
-      - name: Run integration tests
-        run: >-
-          NAMES="${{ steps.run.outputs.image-names }}" \
-            bundle exec rspec \
-            spec/gh_actions_integration_spec.rb
