@@ -3,7 +3,7 @@ require 'json'
 require_relative 'application'
 require_relative 'github_actions'
 
-actions = GithubActions.new(ARGV)
+actions = GithubActions.new(ARGV, '/action.yml')
 
 inputs = actions.inputs
 

@@ -3,10 +3,10 @@ require 'yaml'
 class GithubActions
   attr_reader :argv, :inputs
 
-  def initialize(argv)
+  def initialize(argv, action_path)
     @argv = argv
 
-    action_definition = YAML.load_file('action.yml')
+    action_definition = YAML.load_file(action_path)
 
     @inputs = extract_inputs(action_definition, argv)
   end

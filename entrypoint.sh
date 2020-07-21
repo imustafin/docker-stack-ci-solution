@@ -1,3 +1,3 @@
 #!/bin/sh -l
 
-ruby src/main.rb "$@"
+ruby /src/main.rb "$@"
