@@ -17,10 +17,21 @@ inputs:
         Blank for DockerHub.
         GitHub Packages example: docker.pkg.github.com/\$\{\{ github.repository \}\}/ (trailing slash is required)
     required: false
+  deploy-images:
+    description: JSON array of image aliases which should be deployed
+    required: true
+  deploy-server-docker-sudo:
+    description: true to use sudo to run docker commands on deploy server
+    required: true
+  deploy-server-registry:
+    description: local registry to push images to
+    required: true
 outputs:
   image-names:
-    description: 'Image names available in the registry'
-    build-commands: 'Script to build and push images'
+    description: Image names available in the registry
+    build-commands: Script to build and push images
+    push-to-local-registry: Script to pull remote images and push them to local registry
+    export-local-registry-names: Script to export image names from local registry
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -29,3 +40,6 @@ runs:
     - ${{ inputs.context }}
     - ${{ inputs.args }}
     - ${{ inputs.registry }}
+    - ${{ inputs.deploy-images }}
+    - ${{ inputs.deploy-server-docker-sudo }}
+    - ${{ inputs.deploy-server-registry }}

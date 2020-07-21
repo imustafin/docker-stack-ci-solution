@@ -11,7 +11,7 @@ COPY app.go .
 ARG CGO_ENABLED
 RUN CGO_ENABLED=$CGO_ENABLED GOOS=linux go build -a -installsuffix cgo -o app .
 
-FROM alpine:latest AS href-counter-app
+FROM alpine:latest AS href_counter_app
 # tag-as final - hc - $COMMIT
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/

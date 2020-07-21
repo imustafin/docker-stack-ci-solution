@@ -17,7 +17,7 @@ RSpec.describe DockerProcessor do
         expect(processor.targets).to contain_exactly(
           include(as: 'dependencies', tag: 'go1.7.3'),
           include(as: 'compilation', tag: 'cgo-0_123hash'),
-          include(as: 'href-counter-app', tag: 'final-hc-123hash')
+          include(as: 'href_counter_app', tag: 'final-hc-123hash')
         )
       end
     end

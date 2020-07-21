@@ -25,6 +25,9 @@ jobs:
             "COMMIT": "${{ github.sha }}",
             "CGO_ENABLED": 0
           }
+    outputs:
+      push-to-local-registry: ${{ steps.run.outputs.push-to-local-registry }}
+      export-local-registry-names: ${{ steps.run.outputs.export-local-registry-names }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -37,8 +40,26 @@ jobs:
           dockerfile: 'spec/inputs/href-counter/Dockerfile.multistage-build-tutorial'
           context: 'spec/inputs/href-counter/'
           args: ${{ env.ARGS }}
-          registry: docker.pkg.github.com/${{ github.repository }}/ # / in the end is required
+          registry: docker.pkg.github.com/${{ github.repository }}
+          deploy-images: '["href_counter_app"]'
+          deploy-server-registry: localhost:5000
       - name: Run build commands
         run: |
           set -o xtrace
           ${{ steps.run.outputs.build-commands }}
+
+  acceptance_test_check:
+    runs-on: ubuntu-latest
+    needs:
+      - acceptance_test_run
+    steps:
+      - name: Login to GitHub docker package repo
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+      - name: Make local registry
+        run: docker run -d -p 5000:5000 --restart=always --name registry registry:2
+      - name: Push deploy images to local repositry
+        run: ${{ needs.acceptance_test_run.outputs.push-to-local-registry }}
+      - name: Export local image names and try to pull href-counter-app from local registry by tag
+        run: |
+          ${{ needs.acceptance_test_run.outputs.export-local-registry-names }}
+          docker pull $href_counter_app
