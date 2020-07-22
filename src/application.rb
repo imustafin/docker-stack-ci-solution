@@ -15,7 +15,7 @@ class Application
     @deploy_server_registry = deploy_server_registry
 
     @local_docker = 'docker'
-    @local_docker = "sudo #{docker}" if deploy_server_docker_sudo
+    @local_docker = "sudo #{@local_docker}" if deploy_server_docker_sudo
   end
 
   def run
