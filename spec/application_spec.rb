@@ -32,6 +32,17 @@ RSpec.describe Application do
           "docker remove #{local} || true"
         )
       end
+
+      it 'build-commands sets args only after the first stage where referenced' do
+        RSpec::Matchers.define_negated_matcher :not_include, :include
+
+        arg = '--build-arg CGO_ENABLED=0'
+        expect(outputs['build-commands'].split("\n")).to include(
+          include('--target dependencies').and(not_include(arg)),
+          include('--target compilation').and(include(arg)),
+          include('--target href_counter_app').and(include(arg))
+        )
+      end
     end
   end
 end

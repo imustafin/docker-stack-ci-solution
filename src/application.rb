@@ -57,7 +57,7 @@ class Application
 
       cache_froms << name
 
-      new_args = image[:args].reject { |arg| build_args.include?(arg) }
+      build_args += image[:args].reject { |arg| build_args.include?(arg) }
 
       cache_froms_string = cache_froms.map { |s| "--cache-from #{s}" }.join(' ')
       build_args_string = build_args.map { |a| "--build-arg #{a}=#{@args[a]}" }.join(' ')
