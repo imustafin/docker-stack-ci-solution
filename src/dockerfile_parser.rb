@@ -1,5 +1,5 @@
 class DockerfileParser
-  IMAGE_NAME = '[a-z0-9:._-]+'
+  IMAGE_NAME = '[a-z0-9:._/-]+'
 
   def initialize(dockerfile)
     @lines = IO.readlines(dockerfile).map(&:strip)
