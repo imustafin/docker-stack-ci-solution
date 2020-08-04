@@ -29,9 +29,12 @@ inputs:
 outputs:
   image-names:
     description: Image names available in the registry
-    build-commands: Script to build and push images
-    push-to-local-registry: Script to pull remote images and push them to local registry
-    export-local-registry-names: Script to export image names from local registry
+  build-commands:
+    description: Script to build and push images
+  push-to-local-registry:
+    description: Script to pull remote images and push them to local registry
+  export-local-registry-names:
+    description: Script to export image names from local registry
 runs:
   using: 'docker'
   image: 'Dockerfile'
