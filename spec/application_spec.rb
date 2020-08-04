@@ -28,8 +28,8 @@ RSpec.describe Application do
           "docker pull #{remote}",
           "docker tag #{remote} #{local}",
           "docker push #{local}",
-          "docker remove #{remote} || true",
-          "docker remove #{local} || true"
+          "docker image remove #{remote} || true",
+          "docker image remove #{local} || true"
         )
       end
 

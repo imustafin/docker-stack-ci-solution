@@ -96,8 +96,8 @@ class Application
       commands << "#{docker} pull #{remote}"
       commands << "#{docker} tag #{remote} #{local}"
       commands << "#{docker} push #{local}"
-      commands << "#{docker} remove #{remote} || true"
-      commands << "#{docker} remove #{local} || true"
+      commands << "#{docker} image remove #{remote} || true"
+      commands << "#{docker} image remove #{local} || true"
     end
 
     commands
